@@ -5,10 +5,24 @@
  */
 package Savell_1_pacGame;
 
+import javafx.scene.Group;
+import javafx.scene.shape.*;
+
 /**
  *
  * @author ethan
  */
-public class wall {
+public class wall extends Rectangle{    
+    int x;
+    int y;
+    int w;
+    int h;
+    public wall(int x, int y, int w, int h, Group root){
+        this.setX(x);
+        this.setY(y);
+        this.setHeight(w);
+        this.setWidth(h);
+        root.getChildren().add(this);
+    }
     
 }

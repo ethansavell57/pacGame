@@ -46,13 +46,14 @@ public class Savell_1_pacGame extends Application {
 
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
+    static Group root;
     static Rectangle rect;
     static pacMan pacman;
 
     @Override
     public void start(Stage primaryStage) {
-
-        Group root = new Group();
+        
+        root = new Group();
         Scene scene = new Scene(root);
         primaryStage.setTitle("pac Man");
         primaryStage.setScene(scene);
@@ -68,14 +69,17 @@ public class Savell_1_pacGame extends Application {
         rect = new Rectangle(150, 50, 25, 25);
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
-        for (int i = 10; i < 10) {
-            Rectangle rectangle = new Rectangle();
-            rectangle.setX(0);
-            
-            rectangle
-            rectangle
-
-        }
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println(i);
+//            Rectangle rectangle = new Rectangle();
+//            rectangle.setX(0);
+//            rectangle.setY(i*20);
+//            rectangle.setWidth(20);
+//            rectangle.setHeight(20);
+//            rectangle.setFill(Color.BLACK);
+//            root.getChildren().add(rectangle);
+//
+//        }
 
         //we have created an animation timer --- the class MUST be overwritten - look below 
         AnimationTimer timer = new MyTimer();
@@ -154,27 +158,28 @@ public class Savell_1_pacGame extends Application {
         public void handle(long now) {
             // You can look at the key presses here as well -- this is one of many. Try others
             if (input.contains("LEFT")) {
-                pacman.setX(pacman.getX() - 5);
+                pacman.setCenterX(pacman.getCenterX()- 5);
             }
             handlePacman();
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
 
         }
+        
 
         private void handlePacman() {
             checkBounds(pacman);
             if (pacman.right) {
-                pacman.setX(pacman.getX() + 3);
+                pacman.setCenterX(pacman.getCenterX() + 3);
             }
             if (pacman.left) {
-                pacman.setX(pacman.getX() - 3);
+                pacman.setCenterX(pacman.getCenterX() - 3);
             }
             if (pacman.down) {
-                pacman.setY(pacman.getY() + 3);
+                pacman.setCenterY(pacman.getCenterY() + 3);
             }
             if (pacman.up) {
-                pacman.setY(pacman.getY() - 3);
+                pacman.setCenterY(pacman.getCenterY() - 3);
             }
 
             // stop();
@@ -200,7 +205,9 @@ public class Savell_1_pacGame extends Application {
             // System.out.println("Animation stopped");
         }
     }
-
+    public void makeWalls(){
+    sssssssssssss
+    }
     private void checkBounds(pacMan pacman) {
         // checkBounds is called in two different locations --- it's really only necessary in the animation dohandle
         // experiment - check the differences

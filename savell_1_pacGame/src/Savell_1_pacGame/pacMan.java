@@ -6,13 +6,15 @@
 package Savell_1_pacGame;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Rectangle;
 
 /**
  *
  * @author ethan
  */
-public class pacMan extends Rectangle {
+public class pacMan extends Arc {
     int lives = 3;
     boolean canMoveDown;
     boolean canMoveUp;
@@ -23,10 +25,14 @@ public class pacMan extends Rectangle {
     boolean up;
     boolean down;
         public pacMan(int x, int y){
-        this.setX(x);
-        this.setY(y);
-        this.setHeight(23);
-        this.setWidth(23);
+        this.setFill(Color.PLUM);
+        this.setCenterX(x);
+        this.setCenterY(y);
+        this.setRadiusX(250);
+        this.setRadiusY(250);
+        this.setStartAngle(45);
+        this.setLength(270);
+        this.setType(ArcType.ROUND);
         
         this.setFill(Color.PLUM);
         }
