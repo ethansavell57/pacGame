@@ -51,7 +51,7 @@ public class Savell_1_pacGame extends Application {
     static Rectangle rect;
     static pacMan pacman;
     static Wall wall;
-
+    static int counter;
     @Override
     public void start(Stage primaryStage) {
 
@@ -91,7 +91,13 @@ public class Savell_1_pacGame extends Application {
             @Override
             public void handle(KeyEvent event) {
                 String code = event.getCode().toString();
-                //    input.remove( code );
+                    input.remove( code );
+                if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN){
+                    pacman.left = false;
+                    pacman.right = false;
+                    pacman.up = false;
+                    pacman.down = false;
+                }
                 if (event.getCode() == KeyCode.RIGHT) { // don't use toString here!!!
                     pacman.right = true;
                     pacman.setFill(Color.CADETBLUE);
@@ -120,10 +126,10 @@ public class Savell_1_pacGame extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
-                    pacman.left = false;
-                    pacman.right = false;
-                    pacman.up = false;
-                    pacman.down = false;
+//                    pacman.left = false;
+//                    pacman.right = false;
+//                    pacman.up = false;
+//                    pacman.down = false;
 
                 }
             }
@@ -170,18 +176,31 @@ public class Savell_1_pacGame extends Application {
         }
 
         private void handlePacman() {
+            counter += 1;
+            if(counter % 8 == 0||counter % 8 == 1|| counter % 8 == 3){
+                pacman.setLength(360);
+            } else{
+                pacman.setLength(315);
+            }
+            
+            
             checkBounds(pacman);
             if (pacman.right) {
                 pacman.setCenterX(pacman.getCenterX() + 3);
+                pacman.setRotate(0);
             }
             if (pacman.left) {
                 pacman.setCenterX(pacman.getCenterX() - 3);
+                pacman.setRotate(180);
             }
             if (pacman.down) {
                 pacman.setCenterY(pacman.getCenterY() + 3);
+                pacman.setRotate(90);
             }
+            
             if (pacman.up) {
                 pacman.setCenterY(pacman.getCenterY() - 3);
+                pacman.setRotate(270);
             }
 
             // stop();
@@ -214,6 +233,9 @@ public class Savell_1_pacGame extends Application {
         Wall rightWall = new Wall(1070, 0, 600, 30);
         Wall bottomWall = new Wall(0, 570, 30, 1100);
         Wall botSquare = new Wall(470, 345, 30, 175);
+        Wall sqaureTop = new Wall(470, 225, 30, 75);
+        Wall sqareTop = new Wall(595, 225, 30, 75);
+
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
             Wall botWall = new Wall(360 + ((i - 1) * 360), 450, 150, 30);
@@ -223,9 +245,8 @@ public class Savell_1_pacGame extends Application {
             Wall botLshort = new Wall(100 + ((i - 1) * 725), 470, 30, 170);
             Wall midTop = new Wall(220 + ((i - 1) * 595), 220, 30, 75);
             Wall midBot = new Wall(220 + ((i - 1) * 595), 350, 30, 75);
-            Wall middle = new Wall(470, 100+((i-1)*370), 30, 175);
-            Wall sqaureSides = new Wall(i*(470-((i-1)*150)), 225, 150, 30);
-            
+            Wall middle = new Wall(470, 100 + ((i - 1) * 370), 30, 175);
+            Wall sqaureSides = new Wall(i * (470 - ((i - 1) * 150)), 225, 150, 30);
 
         }
 

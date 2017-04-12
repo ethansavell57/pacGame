@@ -32,4 +32,5 @@ public class Wall extends Rectangle{
         root.getChildren().add(this);
     }
     
+    
 }
