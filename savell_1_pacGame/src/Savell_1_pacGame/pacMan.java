@@ -28,8 +28,8 @@ public class pacMan extends Arc {
         this.setFill(Color.PLUM);
         this.setCenterX(x);
         this.setCenterY(y);
-        this.setRadiusX(250);
-        this.setRadiusY(250);
+        this.setRadiusX(50);
+        this.setRadiusY(50);
         this.setStartAngle(45);
         this.setLength(270);
         this.setType(ArcType.ROUND);

@@ -44,9 +44,10 @@ import javafx.scene.Node;
  */
 public class Savell_1_pacGame extends Application {
 
+    static ArrayList<Wall> wallz = new ArrayList();
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
-    static Group root;
+    public static Group root;
     static Rectangle rect;
     static pacMan pacman;
     static Wall wall;
@@ -208,17 +209,24 @@ public class Savell_1_pacGame extends Application {
     }
 
     public void makeWalls() {
-        Wall topWall = new Wall(0, 0, 30, 1100, root);
-        Wall leftWall = new Wall(0, 0, 600, 30, root);
-        Wall rightWall = new Wall(1070, 0, 600, 30, root);
-        Wall bottomWall = new Wall(0, 570, 30, 1100, root);
+        Wall topWall = new Wall(0, 0, 30, 1100);
+        Wall leftWall = new Wall(0, 0, 600, 30);
+        Wall rightWall = new Wall(1070, 0, 600, 30);
+        Wall bottomWall = new Wall(0, 570, 30, 1100);
+        Wall botSquare = new Wall(470, 345, 30, 175);
         for (int i = 0; i < 3; i++) {
-            Wall topwall = new Wall(365+((i-1)*365), 0, 150, 30, root);
-            Wall botWall = new Wall(365+((i-1)*365), 450, 150, 30, root);
-            Wall topLlong = new Wall(100+((i-1)*870), 100, 150, 30, root);
-            Wall botLlong = new Wall(100+((i-1)*870),350, 150, 30, root);
-            Wall topLShort = new Wall(100+((i-1)*800), 100, 30, 100, root);
-            Wall botLshort = new Wall(100+((i-1)*800), 470, 30, 100, root);
+            Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
+            Wall botWall = new Wall(360 + ((i - 1) * 360), 450, 150, 30);
+            Wall topLlong = new Wall(100 + ((i - 1) * 870), 100, 150, 30);
+            Wall botLlong = new Wall(100 + ((i - 1) * 870), 350, 150, 30);
+            Wall topLShort = new Wall(100 + ((i - 1) * 725), 100, 30, 170);
+            Wall botLshort = new Wall(100 + ((i - 1) * 725), 470, 30, 170);
+            Wall midTop = new Wall(220 + ((i - 1) * 595), 220, 30, 75);
+            Wall midBot = new Wall(220 + ((i - 1) * 595), 350, 30, 75);
+            Wall middle = new Wall(470, 100+((i-1)*370), 30, 175);
+            Wall sqaureSides = new Wall(i*(470-((i-1)*150)), 225, 150, 30);
+            
+
         }
 
 //        root.getChildren().add()

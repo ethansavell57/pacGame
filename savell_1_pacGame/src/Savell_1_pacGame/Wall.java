@@ -5,6 +5,8 @@
  */
 package Savell_1_pacGame;
 
+import static Savell_1_pacGame.Savell_1_pacGame.root;
+import static Savell_1_pacGame.Savell_1_pacGame.wallz;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -18,7 +20,7 @@ public class Wall extends Rectangle{
     int y;
     int w;
     int h;
-    public Wall(int x, int y, int w, int h, Group root){
+    public Wall(int x, int y, int w, int h){
         this.setX(x);
         this.setY(y);
         this.setHeight(w);
@@ -26,6 +28,7 @@ public class Wall extends Rectangle{
         this.setFill(Color.BLACK);
         this.setStroke(Color.BLUE);
         this.setStrokeWidth(5);
+        wallz.add(this);
         root.getChildren().add(this);
     }
     
