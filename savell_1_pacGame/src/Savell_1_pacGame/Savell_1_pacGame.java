@@ -49,10 +49,11 @@ public class Savell_1_pacGame extends Application {
     static Group root;
     static Rectangle rect;
     static pacMan pacman;
+    static Wall wall;
 
     @Override
     public void start(Stage primaryStage) {
-        
+
         root = new Group();
         Scene scene = new Scene(root);
         primaryStage.setTitle("pac Man");
@@ -69,6 +70,7 @@ public class Savell_1_pacGame extends Application {
         rect = new Rectangle(150, 50, 25, 25);
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
+        makeWalls();
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(i);
 //            Rectangle rectangle = new Rectangle();
@@ -158,14 +160,13 @@ public class Savell_1_pacGame extends Application {
         public void handle(long now) {
             // You can look at the key presses here as well -- this is one of many. Try others
             if (input.contains("LEFT")) {
-                pacman.setCenterX(pacman.getCenterX()- 5);
+                pacman.setCenterX(pacman.getCenterX() - 5);
             }
             handlePacman();
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
 
         }
-        
 
         private void handlePacman() {
             checkBounds(pacman);
@@ -205,9 +206,27 @@ public class Savell_1_pacGame extends Application {
             // System.out.println("Animation stopped");
         }
     }
-    public void makeWalls(){
-    sssssssssssss
+
+    public void makeWalls() {
+        Wall topWall = new Wall(0, 0, 30, 1100, root);
+        Wall leftWall = new Wall(0, 0, 600, 30, root);
+        Wall rightWall = new Wall(1070, 0, 600, 30, root);
+        Wall bottomWall = new Wall(0, 570, 30, 1100, root);
+        for (int i = 0; i < 3; i++) {
+            Wall topwall = new Wall(365+((i-1)*365), 0, 150, 30, root);
+            Wall botWall = new Wall(365+((i-1)*365), 450, 150, 30, root);
+            Wall topLlong = new Wall(100+((i-1)*870), 100, 150, 30, root);
+            Wall botLlong = new Wall(100+((i-1)*870),350, 150, 30, root);
+            Wall topLShort = new Wall(100+((i-1)*800), 100, 30, 100, root);
+            Wall botLshort = new Wall(100+((i-1)*800), 470, 30, 100, root);
+        }
+
+//        root.getChildren().add()
+        for (int i = 12; i < 12; i++) {
+//        wall = new Wall();
+        }
     }
+
     private void checkBounds(pacMan pacman) {
         // checkBounds is called in two different locations --- it's really only necessary in the animation dohandle
         // experiment - check the differences

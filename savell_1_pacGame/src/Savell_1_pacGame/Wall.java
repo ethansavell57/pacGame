@@ -6,22 +6,26 @@
 package Savell_1_pacGame;
 
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 /**
  *
  * @author ethan
  */
-public class wall extends Rectangle{    
+public class Wall extends Rectangle{    
     int x;
     int y;
     int w;
     int h;
-    public wall(int x, int y, int w, int h, Group root){
+    public Wall(int x, int y, int w, int h, Group root){
         this.setX(x);
         this.setY(y);
         this.setHeight(w);
         this.setWidth(h);
+        this.setFill(Color.BLACK);
+        this.setStroke(Color.BLUE);
+        this.setStrokeWidth(5);
         root.getChildren().add(this);
     }
     
