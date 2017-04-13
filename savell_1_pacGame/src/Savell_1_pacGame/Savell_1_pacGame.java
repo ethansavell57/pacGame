@@ -177,6 +177,9 @@ public class Savell_1_pacGame extends Application {
         }
 
         private void handlePacman() {
+            if(checkWall()){
+                System.out.println("WALLS");
+            }
             mouthCounter += 1;
             if (mouthCounter > 6) {
                 if (pacman.open) {
@@ -194,14 +197,15 @@ public class Savell_1_pacGame extends Application {
                     pacman.open = true;
                 }
             }
-
+            
             checkBounds(pacman);
             if (pacman.right) {
                 pacman.setCenterX(pacman.getCenterX() + 3);
                 pacman.setRotate(0);
                 if (checkWall()){
                     pacman.right = false; 
-                     pacman.setCenterX(pacman.getCenterX() - 5);
+                    pacman.setCenterX(pacman.getCenterX() - 5);
+                     
                 }
                 
                 
