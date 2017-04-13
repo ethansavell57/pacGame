@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 public class pacMan extends Arc {
 
     int lives = 3;
+    int score;
     boolean canMoveDown;
     boolean canMoveUp;
     boolean canMoveLeft;
@@ -25,13 +26,15 @@ public class pacMan extends Arc {
     boolean right;
     boolean up;
     boolean down;
+    boolean open = true;
+    boolean closed;
 
     public pacMan(int x, int y) {
         this.setFill(Color.PLUM);
         this.setCenterX(x);
         this.setCenterY(y);
-        this.setRadiusX(32);
-        this.setRadiusY(32);
+        this.setRadiusX(22);
+        this.setRadiusY(22);
         this.setStartAngle(45);
 
         this.setLength(270);

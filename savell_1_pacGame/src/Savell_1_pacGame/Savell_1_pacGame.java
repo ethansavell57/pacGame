@@ -51,7 +51,8 @@ public class Savell_1_pacGame extends Application {
     static Rectangle rect;
     static pacMan pacman;
     static Wall wall;
-    static int counter;
+    static int mouthCounter;
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -91,8 +92,8 @@ public class Savell_1_pacGame extends Application {
             @Override
             public void handle(KeyEvent event) {
                 String code = event.getCode().toString();
-                    input.remove( code );
-                if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN){
+                input.remove(code);
+                if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
                     pacman.left = false;
                     pacman.right = false;
                     pacman.up = false;
@@ -176,31 +177,80 @@ public class Savell_1_pacGame extends Application {
         }
 
         private void handlePacman() {
-            counter += 1;
-            if(counter % 8 == 0||counter % 8 == 1|| counter % 8 == 3){
-                pacman.setLength(360);
-            } else{
-                pacman.setLength(315);
+            mouthCounter += 1;
+            if (mouthCounter > 6) {
+                if (pacman.open) {
+                    pacman.closed = false;
+                    pacman.setLength(360);
+                    pacman.closed = true;
+                    
+                    mouthCounter = 0;
+
+                }
+                if(pacman.closed){
+                    pacman.open = false;
+                    pacman.setLength(270);
+                    mouthCounter = 0;
+                    pacman.open = true;
+                }
             }
-            
-            
+
             checkBounds(pacman);
             if (pacman.right) {
                 pacman.setCenterX(pacman.getCenterX() + 3);
                 pacman.setRotate(0);
+                if (checkWall()){
+                    pacman.right = false; 
+                     pacman.setCenterX(pacman.getCenterX() - 5);
+                }
+                
+                
+//                for (Wall w : wallz) {
+//                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
+//                        pacman.setCenterX(pacman.getCenterX() - 3);
+//                    }
+//                }
             }
-            if (pacman.left) {
+            else if (pacman.left) {
                 pacman.setCenterX(pacman.getCenterX() - 3);
                 pacman.setRotate(180);
+                 if (checkWall()){
+                     pacman.left=false;
+                     pacman.setCenterX(pacman.getCenterX()+ 5);
+                }
+//                for (Wall w : wallz) {
+//                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
+//                        pacman.setCenterX(pacman.getCenterX() + 3);
+//                    }
+//                }
             }
-            if (pacman.down) {
+            else if (pacman.down) {
                 pacman.setCenterY(pacman.getCenterY() + 3);
                 pacman.setRotate(90);
+                
+                 if (checkWall()){
+                     pacman.down=false;
+                     pacman.setCenterY(pacman.getCenterY() - 5);
+                }
+//                for (Wall w : wallz) {
+//                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
+//                        pacman.setCenterY(pacman.getCenterY() - 3);
+//                    }
+//                }
             }
-            
-            if (pacman.up) {
+
+            else if (pacman.up) {
                 pacman.setCenterY(pacman.getCenterY() - 3);
                 pacman.setRotate(270);
+                 if (checkWall()){
+                     pacman.up =false; 
+                     pacman.setCenterY(pacman.getCenterY() + 5);
+                }
+//                for (Wall w : wallz) {
+//                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
+//                        pacman.setCenterY(pacman.getCenterY() + 3);
+//                    }
+//                }
             }
 
             // stop();
@@ -277,5 +327,17 @@ public class Savell_1_pacGame extends Application {
             pacman.setFill(Color.ORANGE);
         }
     }
+    
+    public boolean checkWall(){
+           for (Wall w : wallz) {
+            if (pacman.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                return true;
+            }
+           }
+           return false; 
+        
+    }
+    
+    
 
 }
