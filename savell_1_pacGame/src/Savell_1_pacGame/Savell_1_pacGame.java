@@ -74,6 +74,7 @@ public class Savell_1_pacGame extends Application {
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
         makeWalls();
+        makeDots();
         
      
 //        for (int i = 0; i < 10; i++) {
@@ -173,6 +174,7 @@ public class Savell_1_pacGame extends Application {
             if (input.contains("LEFT")) {
                 pacman.setCenterX(pacman.getCenterX() - 5);
             }
+            System.out.println(pacman.getCenterX()+","+pacman.getCenterY());
             handlePacman();
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
@@ -284,10 +286,13 @@ public class Savell_1_pacGame extends Application {
         }
     }
     public void makeDots(){
-        for(int i = 0;i < 1100; i++){
-            
+        for(int i = 1;i < 22; i++){
+            for(){
+                Dot dot = new Dot(i*50, 60);
+            }
         }
     }
+    
     public void makeWalls() {
         Wall topWall = new Wall(0, 0, 30, 1100);
         Wall leftWall = new Wall(0, 0, 600, 30);
