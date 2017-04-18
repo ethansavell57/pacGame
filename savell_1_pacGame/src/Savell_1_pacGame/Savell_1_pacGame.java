@@ -47,6 +47,7 @@ public class Savell_1_pacGame extends Application {
     static ArrayList<Wall> wallz = new ArrayList();
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
+    static ArrayList<Dot> dotz = new ArrayList();
     public static Group root;
     static Rectangle rect;
     static pacMan pacman;
@@ -73,6 +74,8 @@ public class Savell_1_pacGame extends Application {
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
         makeWalls();
+        
+     
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(i);
 //            Rectangle rectangle = new Rectangle();
@@ -280,7 +283,11 @@ public class Savell_1_pacGame extends Application {
             // System.out.println("Animation stopped");
         }
     }
-
+    public void makeDots(){
+        for(int i = 0;i < 1100; i++){
+            
+        }
+    }
     public void makeWalls() {
         Wall topWall = new Wall(0, 0, 30, 1100);
         Wall leftWall = new Wall(0, 0, 600, 30);
@@ -292,6 +299,7 @@ public class Savell_1_pacGame extends Application {
 
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
+       //    topwall.setFill(Color.AQUAMARINE); 
             Wall botWall = new Wall(360 + ((i - 1) * 360), 450, 150, 30);
             Wall topLlong = new Wall(100 + ((i - 1) * 870), 100, 150, 30);
             Wall botLlong = new Wall(100 + ((i - 1) * 870), 350, 150, 30);
