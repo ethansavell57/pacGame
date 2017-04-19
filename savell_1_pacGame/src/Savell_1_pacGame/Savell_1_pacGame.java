@@ -281,30 +281,50 @@ public class Savell_1_pacGame extends Application {
     }
 
     public void makeDots() {
-        for (int i = 1; i < 8; i++) {
-            for (int j = 0; j < 2; j++) {
-                Dot dot = new Dot(10 + (i * 47), 65 + (j * 490));
+//        for (int i = 1; i < 8; i++) {
+//            for (int j = 0; j < 2; j++) {
+//                Dot dot = new Dot(10 + (i * 47), 65 + (j * 490));
+//            }
+//        }
+//        for (int i = 8; i < 14; i++) {
+//            for (int j = 0; j < 2; j++) {
+//                Dot dot = new Dot(i * 53, 60 + (j * 490));
+//            }
+//        }
+//        for (int i = 15; i < 21; i++) {
+//            for (int j = 0; j < 2; j++) {
+//                Dot dot = new Dot(i * 52, 60 + (j * 490));
+//            }
+//        }
+//        for (int i = 0; i < 8; i++) {
+//            Dot dot = new Dot(60, 100 + (i * 60));
+//        }
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                Dot dot = new Dot(330 + (j * 360), 100 + (i * 60));
+//            }
+//        }
+//        for ( int i = 0; i < 4; i ++) {
+//            Dot dot = new Dot(145+(i*45), 180);
+//            
+//        }
+//        for (int i = 4; i < 19; i ++){
+//            Dot dot = new Dot(145+(44*i), 180);
+//        }
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 6; j++) {
+                FakeDot fdot = new FakeDot(i * 50, j*50);
+                for (FakeDot fd : fdotz) {
+                    for (Wall w : wallz) {
+                        if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                        } else {
+                            Dot dot = new Dot(i*50, j*50);
+                        }
+                    }
+                }
+
             }
         }
-        for (int i = 8; i < 14; i++) {
-            for (int j = 0; j < 2; j++) {
-                Dot dot = new Dot(i * 53, 60 + (j * 490));
-            }
-        }
-        for (int i = 15; i < 21; i++) {
-            for (int j = 0; j < 2; j++) {
-                Dot dot = new Dot(i * 52, 60 + (j * 490));
-            }
-        }
-        for (int i = 0; i < 8; i++) {
-            Dot dot = new Dot(60, 100 + (i * 60));
-        }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 3; j++) {
-                Dot dot = new Dot(330 + (j * 360), 100 + (i * 60));
-            }
-        }
-        
     }
 
     public void makeWalls() {
