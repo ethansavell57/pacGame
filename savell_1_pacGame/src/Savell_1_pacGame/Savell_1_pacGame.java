@@ -48,6 +48,7 @@ public class Savell_1_pacGame extends Application {
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
     static ArrayList<Dot> dotz = new ArrayList();
+    static ArrayList<FakeDot> fdotz = new ArrayList();
     public static Group root;
     static Rectangle rect;
     static pacMan pacman;
@@ -75,8 +76,7 @@ public class Savell_1_pacGame extends Application {
         badblockz.add(rect);
         makeWalls();
         makeDots();
-        
-     
+
 //        for (int i = 0; i < 10; i++) {
 //            System.out.println(i);
 //            Rectangle rectangle = new Rectangle();
@@ -88,7 +88,6 @@ public class Savell_1_pacGame extends Application {
 //            root.getChildren().add(rectangle);
 //
 //        }
-
         //we have created an animation timer --- the class MUST be overwritten - look below 
         AnimationTimer timer = new MyTimer();
 
@@ -174,7 +173,7 @@ public class Savell_1_pacGame extends Application {
             if (input.contains("LEFT")) {
                 pacman.setCenterX(pacman.getCenterX() - 5);
             }
-            System.out.println(pacman.getCenterX()+","+pacman.getCenterY());
+            System.out.println(pacman.getCenterX() + ",");
             handlePacman();
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
@@ -182,7 +181,7 @@ public class Savell_1_pacGame extends Application {
         }
 
         private void handlePacman() {
-            if(checkWall()){
+            if (checkWall()) {
                 System.out.println("WALLS");
             }
             mouthCounter += 1;
@@ -191,69 +190,64 @@ public class Savell_1_pacGame extends Application {
                     pacman.closed = false;
                     pacman.setLength(360);
                     pacman.closed = true;
-                    
+
                     mouthCounter = 0;
 
                 }
-                if(pacman.closed){
+                if (pacman.closed) {
                     pacman.open = false;
                     pacman.setLength(270);
                     mouthCounter = 0;
                     pacman.open = true;
                 }
             }
-            
+
             checkBounds(pacman);
             if (pacman.right) {
                 pacman.setCenterX(pacman.getCenterX() + 3);
                 pacman.setRotate(0);
-                if (checkWall()){
-                    pacman.right = false; 
+                if (checkWall()) {
+                    pacman.right = false;
                     pacman.setCenterX(pacman.getCenterX() - 5);
-                     
+
                 }
-                
-                
+
 //                for (Wall w : wallz) {
 //                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
 //                        pacman.setCenterX(pacman.getCenterX() - 3);
 //                    }
 //                }
-            }
-            else if (pacman.left) {
+            } else if (pacman.left) {
                 pacman.setCenterX(pacman.getCenterX() - 3);
                 pacman.setRotate(180);
-                 if (checkWall()){
-                     pacman.left=false;
-                     pacman.setCenterX(pacman.getCenterX()+ 5);
+                if (checkWall()) {
+                    pacman.left = false;
+                    pacman.setCenterX(pacman.getCenterX() + 5);
                 }
 //                for (Wall w : wallz) {
 //                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
 //                        pacman.setCenterX(pacman.getCenterX() + 3);
 //                    }
 //                }
-            }
-            else if (pacman.down) {
+            } else if (pacman.down) {
                 pacman.setCenterY(pacman.getCenterY() + 3);
                 pacman.setRotate(90);
-                
-                 if (checkWall()){
-                     pacman.down=false;
-                     pacman.setCenterY(pacman.getCenterY() - 5);
+
+                if (checkWall()) {
+                    pacman.down = false;
+                    pacman.setCenterY(pacman.getCenterY() - 5);
                 }
 //                for (Wall w : wallz) {
 //                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
 //                        pacman.setCenterY(pacman.getCenterY() - 3);
 //                    }
 //                }
-            }
-
-            else if (pacman.up) {
+            } else if (pacman.up) {
                 pacman.setCenterY(pacman.getCenterY() - 3);
                 pacman.setRotate(270);
-                 if (checkWall()){
-                     pacman.up =false; 
-                     pacman.setCenterY(pacman.getCenterY() + 5);
+                if (checkWall()) {
+                    pacman.up = false;
+                    pacman.setCenterY(pacman.getCenterY() + 5);
                 }
 //                for (Wall w : wallz) {
 //                    if (w.getBoundsInParent().intersects(pacman.getBoundsInParent())) {
@@ -285,14 +279,34 @@ public class Savell_1_pacGame extends Application {
             // System.out.println("Animation stopped");
         }
     }
-    public void makeDots(){
-        for(int i = 1;i < 22; i++){
-            for(){
-                Dot dot = new Dot(i*50, 60);
+
+    public void makeDots() {
+        for (int i = 1; i < 8; i++) {
+            for (int j = 0; j < 2; j++) {
+                Dot dot = new Dot(10 + (i * 47), 65 + (j * 490));
             }
         }
+        for (int i = 8; i < 14; i++) {
+            for (int j = 0; j < 2; j++) {
+                Dot dot = new Dot(i * 53, 60 + (j * 490));
+            }
+        }
+        for (int i = 15; i < 21; i++) {
+            for (int j = 0; j < 2; j++) {
+                Dot dot = new Dot(i * 52, 60 + (j * 490));
+            }
+        }
+        for (int i = 0; i < 8; i++) {
+            Dot dot = new Dot(60, 100 + (i * 60));
+        }
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 3; j++) {
+                Dot dot = new Dot(330 + (j * 360), 100 + (i * 60));
+            }
+        }
+        
     }
-    
+
     public void makeWalls() {
         Wall topWall = new Wall(0, 0, 30, 1100);
         Wall leftWall = new Wall(0, 0, 600, 30);
@@ -304,7 +318,7 @@ public class Savell_1_pacGame extends Application {
 
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
-       //    topwall.setFill(Color.AQUAMARINE); 
+            //    topwall.setFill(Color.AQUAMARINE); 
             Wall botWall = new Wall(360 + ((i - 1) * 360), 450, 150, 30);
             Wall topLlong = new Wall(100 + ((i - 1) * 870), 100, 150, 30);
             Wall botLlong = new Wall(100 + ((i - 1) * 870), 350, 150, 30);
@@ -344,17 +358,15 @@ public class Savell_1_pacGame extends Application {
             pacman.setFill(Color.ORANGE);
         }
     }
-    
-    public boolean checkWall(){
-           for (Wall w : wallz) {
+
+    public boolean checkWall() {
+        for (Wall w : wallz) {
             if (pacman.getBoundsInParent().intersects(w.getBoundsInParent())) {
                 return true;
             }
-           }
-           return false; 
-        
+        }
+        return false;
+
     }
-    
-    
 
 }

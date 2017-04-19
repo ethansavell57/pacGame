@@ -6,7 +6,7 @@
 package Savell_1_pacGame;
 
 import static Savell_1_pacGame.Savell_1_pacGame.root;
-import static Savell_1_pacGame.Savell_1_pacGame.dotz;
+import static Savell_1_pacGame.Savell_1_pacGame.fdotz;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -14,14 +14,13 @@ import javafx.scene.shape.Circle;
  *
  * @author ethan
  */
-public class Dot extends Circle {
-    
-    public Dot(int x, int y){
+public class FakeDot extends Circle {
+
+    public FakeDot(int x, int y) {
         this.setRadius(10);
         this.setCenterX(x);
         this.setCenterY(y);
-        this.setFill(Color.INDIANRED);
-        dotz.add(this);
+        fdotz.add(this);
         root.getChildren().add(this);
     }
 }
