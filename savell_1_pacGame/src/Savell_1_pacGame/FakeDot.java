@@ -16,6 +16,8 @@ import javafx.scene.shape.Circle;
  */
 public class FakeDot extends Circle {
 
+    boolean imok = true; 
+    boolean gobbleok = false; 
     public FakeDot(int x, int y) {
         this.setRadius(10);
         this.setCenterX(x);

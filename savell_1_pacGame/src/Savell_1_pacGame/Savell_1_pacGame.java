@@ -54,6 +54,7 @@ public class Savell_1_pacGame extends Application {
     static pacMan pacman;
     static Wall wall;
     static int mouthCounter;
+    static boolean [][] powerpellets = new boolean [1100][600];  
 
     @Override
     public void start(Stage primaryStage) {
@@ -173,7 +174,7 @@ public class Savell_1_pacGame extends Application {
             if (input.contains("LEFT")) {
                 pacman.setCenterX(pacman.getCenterX() - 5);
             }
-            System.out.println(pacman.getCenterX() + ",");
+          //  System.out.println(pacman.getCenterX() + ",");
             handlePacman();
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
@@ -311,20 +312,67 @@ public class Savell_1_pacGame extends Application {
 //        for (int i = 4; i < 19; i ++){
 //            Dot dot = new Dot(145+(44*i), 180);
 //        }
-        for (int i = 0; i < 12; i++) {
-            for (int j = 0; j < 6; j++) {
+
+
+ for (int i = 0; i < 1100; i++) {
+            for (int j = 0; j < 600; j++) {
+                powerpellets[i][j] = false; }}
+
+ for (int i = 0; i < 21; i++) {
+            for (int j = 0; j < 11; j++) {
+                powerpellets[i*50][j*50] = true; }}
+
+int dotnum = 0; 
+        for (int i = 0; i < 21; i++) {
+            for (int j = 0; j < 11; j++) {
                 FakeDot fdot = new FakeDot(i * 50, j*50);
                 for (FakeDot fd : fdotz) {
                     for (Wall w : wallz) {
                         if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                            System.out.printf("\n *********** \n Intersection at %d %d \n ***********\n", i*50 , j*50);
+                             powerpellets[i*50][j*50] = false; 
+                            
                         } else {
-                            Dot dot = new Dot(i*50, j*50);
+                            dotnum++; 
+                            System.out.printf("You have %d dots ---- ", dotnum);
+                            System.out.printf("dot at %d %d \n", i, j); 
+                          
                         }
                     }
                 }
 
             }
         }
+        
+        for (FakeDot fd : fdotz) {
+                    for (Wall w : wallz) {
+                         if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                        fd.imok = false; 
+                    }
+                    }}
+        
+        dotnum = 0; 
+        
+        for (FakeDot fd : fdotz) {
+            if(fd.imok){
+              
+                 fd.setFill(Color.INDIANRED);
+                 fd.gobbleok = true; 
+            }
+            else { 
+              fd.setFill(Color.TRANSPARENT);
+              fd.gobbleok = false; 
+        }
+//      for (int i = 0; i < 12; i++) {
+//            for (int j = 0; j < 6; j++) {
+//                if (powerpellets[i*50][j*50]){
+//                    Dot dot = new Dot(i*50, j*50); 
+//                    dotnum++; 
+//                       System.out.printf("\n You really have %d dots", dotnum);
+//                    
+//                }
+//            }
+    }
     }
 
     public void makeWalls() {
