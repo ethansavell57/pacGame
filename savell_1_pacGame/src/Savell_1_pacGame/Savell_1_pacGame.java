@@ -60,6 +60,7 @@ public class Savell_1_pacGame extends Application {
     static pacMan pacman;
     static Wall wall;
     static Wall naruto;
+    static Junction junct;
     
     static int mouthCounter;
     static boolean[][] powerpellets = new boolean[1100][600];
@@ -90,6 +91,9 @@ public class Savell_1_pacGame extends Application {
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
         mark = new Mark(580, 156);
+        junct = new Junction(420,250);
+        junct = new Junction(600, 300);
+        junct = new Junction(600, 270);
         makeWalls();
         makeDots();
 
@@ -112,7 +116,9 @@ public class Savell_1_pacGame extends Application {
                 String code = event.getCode().toString();
                 input.remove(code);
                 if (event.getCode() == KeyCode.W) {
-                    ghost.up = true;
+                    for(Ghost g: ghostz){
+                        g.up = true;
+                    }
                 }
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
                     pacman.left = false;

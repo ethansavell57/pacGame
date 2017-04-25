@@ -6,6 +6,7 @@
 package Savell_1_pacGame;
 
 import static Savell_1_pacGame.Savell_1_pacGame.ghostz;
+import static Savell_1_pacGame.Savell_1_pacGame.junctionz;
 import static Savell_1_pacGame.Savell_1_pacGame.randy;
 import static Savell_1_pacGame.Savell_1_pacGame.root;
 import static Savell_1_pacGame.Savell_1_pacGame.wallz;
@@ -66,10 +67,21 @@ public class Ghost extends Rectangle {
         }
         if (this.right) {
             this.setX(this.getX() + 3);
+           if (checkJunction()){
+                int n = randy.nextInt(3)+1;
+                if( n== 1){
+                    this.right = false;
+                    this.up = true;
+                }
+                if(n == 2){
+                    this.right = false;
+                    this.down = true;
+                }
+            }
             if (checkWallGhost()) {
                 this.right = false;
                 this.setX(this.getX() - 5);
-                int n = randy.nextInt(2)+1;
+                int n = randy.nextInt(2) + 1;
                 if (n == 1) {
                     this.up = true;
                 } else {
@@ -80,10 +92,21 @@ public class Ghost extends Rectangle {
 
         } else if (this.left) {
             this.setX(this.getX() - 3);
+            if (checkJunction()){
+                int n = randy.nextInt(3)+1;
+                if( n== 1){
+                    this.left = false;
+                    this.up = true;
+                }
+                if(n == 2){
+                    this.left = false;
+                    this.down = true;
+                }
+            }
             if (checkWallGhost()) {
                 this.left = false;
                 this.setX(this.getX() + 5);
-                int n = randy.nextInt(2)+1;
+                int n = randy.nextInt(2) + 1;
                 if (n == 1) {
                     this.up = true;
                 } else {
@@ -94,48 +117,73 @@ public class Ghost extends Rectangle {
 
         } else if (this.down) {
             this.setY(this.getY() + 3);
+            if (checkJunction()){
+                int n = randy.nextInt(3)+1;
+                if( n== 1){
+                    this.down = false;
+                    this.right = true;
+                }
+                if(n == 2){
+                    this.down = false;
+                    this.left = true;
+                }
+            }
             if (checkWallGhost()) {
                 this.down = false;
                 this.setY(this.getY() - 5);
-                int n = randy.nextInt(2)+1;
-                if(n == 1){
+                int n = randy.nextInt(2) + 1;
+                if (n == 1) {
                     this.right = true;
-                }else {
+                } else {
                     this.left = true;
                 }
             }
 
         } else if (this.up) {
             this.setY(this.getY() - 3);
+            if (checkJunction()){
+                int n = randy.nextInt(3)+1;
+                if( n== 1){
+                    this.up = false;
+                    this.right = true;
+                }
+                if(n == 2){
+                    this.up = false;
+                    this.left = true;
+                }
+            }
             if (checkWallGhost()) {
                 this.up = false;
                 this.setY(this.getY() + 5);
-                int n = randy.nextInt(2)+1;
-                if(n == 1){
+                int n = randy.nextInt(2) + 1;
+                if (n == 1) {
                     this.right = true;
-                }else {
+                } else {
                     this.left = true;
                 }
             }
         }
     }
 
-    public boolean checkWallGhost() {
-        for(Ghost g :ghostz){
-            for(Junction j : junctionz){
-                
+    public boolean checkJunction() {
+        for (Junction j : junctionz) {
+            if (this.getBoundsInParent().intersects(j.getBoundsInParent())) {
+                return true;
             }
-        }
-        for (Ghost g : ghostz) {
-            for (Wall w : wallz) {
-
-                if (g.getBoundsInParent().intersects(w.getBoundsInParent())) {
-                    return true;
-                }
-            }
-
         }
         return false;
-        
+    }
+
+    public boolean checkWallGhost() {
+
+        for (Wall w : wallz) {
+
+            if (this.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }

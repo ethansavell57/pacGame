@@ -6,6 +6,7 @@
 package Savell_1_pacGame;
 
 import static Savell_1_pacGame.Savell_1_pacGame.junctionz;
+import static Savell_1_pacGame.Savell_1_pacGame.root;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -19,5 +20,6 @@ class Junction extends Rectangle{
         this.setHeight(40);
         this.setWidth(100);
         junctionz.add(this);
+        root.getChildren().add(this);
     }
 }
