@@ -25,4 +25,5 @@ public class FakeDot extends Circle {
         fdotz.add(this);
         root.getChildren().add(this);
     }
+
 }

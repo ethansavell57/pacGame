@@ -31,6 +31,14 @@ public class Wall extends Rectangle{
         wallz.add(this);
         root.getChildren().add(this);
     }
+    public Wall(int x, int y){
+        this.setX(x);
+        this.setY(y);
+        this.setHeight(40);
+        this.setWidth(100);
+        wallz.add(this);
+    }
+            
     
     
 }

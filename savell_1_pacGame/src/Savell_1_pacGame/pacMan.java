@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 public class pacMan extends Arc {
 
     int lives = 3;
-    int score;
+    int rawScore;
     boolean canMoveDown;
     boolean canMoveUp;
     boolean canMoveLeft;

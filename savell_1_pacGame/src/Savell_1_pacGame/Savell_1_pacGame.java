@@ -16,6 +16,7 @@
 package Savell_1_pacGame;
 
 import java.util.ArrayList;
+import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -45,16 +46,24 @@ import javafx.scene.Node;
 public class Savell_1_pacGame extends Application {
 
     static ArrayList<Wall> wallz = new ArrayList();
+    static ArrayList<Junction> junctionz = new ArrayList();
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
     static ArrayList<Dot> dotz = new ArrayList();
     static ArrayList<FakeDot> fdotz = new ArrayList();
+    static ArrayList<Ghost> ghostz = new ArrayList();
     public static Group root;
     static Rectangle rect;
+    static Ghost ghost;
+    static Mark mark;
+    static boolean wallInCenter = true;
     static pacMan pacman;
     static Wall wall;
+    static Wall naruto;
+    
     static int mouthCounter;
-    static boolean [][] powerpellets = new boolean [1100][600];  
+    static boolean[][] powerpellets = new boolean[1100][600];
+    static Random randy;
 
     @Override
     public void start(Stage primaryStage) {
@@ -65,21 +74,26 @@ public class Savell_1_pacGame extends Application {
         primaryStage.setScene(scene);
 
         Canvas canvas = new Canvas(1100, 600);
+        randy = new Random();
 
         //Notice gc is not being used yet 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         //notice we are creating shape objects 
         pacman = new pacMan(300, 300);
+        ghost = new Ghost(2);
+        ghost = new Ghost(1);
+        ghost = new Ghost(3);
+        ghost = new Ghost(4);
 
         rect = new Rectangle(150, 50, 25, 25);
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
+        mark = new Mark(580, 156);
         makeWalls();
         makeDots();
 
 //        for (int i = 0; i < 10; i++) {
-//            System.out.println(i);
 //            Rectangle rectangle = new Rectangle();
 //            rectangle.setX(0);
 //            rectangle.setY(i*20);
@@ -97,6 +111,9 @@ public class Savell_1_pacGame extends Application {
             public void handle(KeyEvent event) {
                 String code = event.getCode().toString();
                 input.remove(code);
+                if (event.getCode() == KeyCode.W) {
+                    ghost.up = true;
+                }
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
                     pacman.left = false;
                     pacman.right = false;
@@ -174,12 +191,59 @@ public class Savell_1_pacGame extends Application {
             if (input.contains("LEFT")) {
                 pacman.setCenterX(pacman.getCenterX() - 5);
             }
-          //  System.out.println(pacman.getCenterX() + ",");
+            System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
+            System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
             handlePacman();
+            checkDots();
+            for (Ghost g: ghostz){
+                g.handleGhost();
+            }
+            if (wallInCenter) {
+                wallz.remove(naruto);
+            }
+
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
-
         }
+
+//        private void handleGhost() {
+//            if (checkWallGhost()) {
+//                System.out.println("GHost Is touching wall");
+//            }
+//            if (ghost.right) {
+//                ghost.setX(ghost.getX() + 3);
+//                if (checkWall()) {
+//                    ghost.right = false;
+//                    ghost.setX(ghost.getX() - 5);
+//
+//                }
+//
+//            } else if (ghost.left) {
+//                ghost.setX(ghost.getX() - 3);
+//                ghost.setRotate(180);
+//                if (checkWallGhost()) {
+//                    ghost.left = false;
+//                    ghost.setX(ghost.getX() + 5);
+//                }
+//
+//            } else if (ghost.down) {
+//                ghost.setY(ghost.getY() + 3);
+//                ghost.setRotate(90);
+//
+//                if (checkWallGhost()) {
+//                    ghost.down = false;
+//                    ghost.setY(ghost.getY() - 5);
+//                }
+//
+//            } else if (ghost.up) {
+//                ghost.setY(ghost.getY() - 3);
+//                ghost.setRotate(270);
+//                if (checkWallGhost()) {
+//                    ghost.up = false;
+//                    ghost.setY(ghost.getY() + 5);
+//                }
+//            }
+//        }
 
         private void handlePacman() {
             if (checkWall()) {
@@ -281,6 +345,19 @@ public class Savell_1_pacGame extends Application {
         }
     }
 
+    public void checkDots() {
+        for (FakeDot fd : fdotz) {
+            if (pacman.getBoundsInParent().intersects(fd.getBoundsInParent())) {
+                pacman.rawScore += 1;
+                root.getChildren().remove(fd);
+                fd.setCenterX(2000);
+                fd.setCenterY(2000);
+
+//                System.out.println("*********rawScore is " + pacman.rawScore + "*********");
+            }
+        }
+    }
+
     public void makeDots() {
 //        for (int i = 1; i < 8; i++) {
 //            for (int j = 0; j < 2; j++) {
@@ -313,56 +390,59 @@ public class Savell_1_pacGame extends Application {
 //            Dot dot = new Dot(145+(44*i), 180);
 //        }
 
-
- for (int i = 0; i < 1100; i++) {
+        for (int i = 0; i < 1100; i++) {
             for (int j = 0; j < 600; j++) {
-                powerpellets[i][j] = false; }}
+                powerpellets[i][j] = false;
+            }
+        }
 
- for (int i = 0; i < 21; i++) {
-            for (int j = 0; j < 11; j++) {
-                powerpellets[i*50][j*50] = true; }}
+        for (int i = 0; i < 22; i++) {
+            for (int j = 0; j < 12; j++) {
+                powerpellets[i * 50][j * 50] = true;
+            }
+        }
 
-int dotnum = 0; 
-        for (int i = 0; i < 21; i++) {
-            for (int j = 0; j < 11; j++) {
-                FakeDot fdot = new FakeDot(i * 50, j*50);
+        int dotnum = 0;
+        for (int i = 0; i < 22; i++) {
+            for (int j = 0; j < 12; j++) {
+                FakeDot fdot = new FakeDot(i * 50, j * 50);
                 for (FakeDot fd : fdotz) {
                     for (Wall w : wallz) {
                         if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
-                            System.out.printf("\n *********** \n Intersection at %d %d \n ***********\n", i*50 , j*50);
-                             powerpellets[i*50][j*50] = false; 
-                            
+//                            System.out.printf("\n *********** \n Intersection at %d %d \n ***********\n", i * 50, j * 50);
+                            powerpellets[i * 50][j * 50] = false;
+
                         } else {
-                            dotnum++; 
-                            System.out.printf("You have %d dots ---- ", dotnum);
-                            System.out.printf("dot at %d %d \n", i, j); 
-                          
+                            dotnum++;
+//                            System.out.printf("You have %d dots ---- ", dotnum);
+//                            System.out.printf("dot at %d %d \n", i, j);
+
                         }
                     }
                 }
 
             }
         }
-        
+
         for (FakeDot fd : fdotz) {
-                    for (Wall w : wallz) {
-                         if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
-                        fd.imok = false; 
-                    }
-                    }}
-        
-        dotnum = 0; 
-        
-        for (FakeDot fd : fdotz) {
-            if(fd.imok){
-              
-                 fd.setFill(Color.INDIANRED);
-                 fd.gobbleok = true; 
+            for (Wall w : wallz) {
+                if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                    fd.imok = false;
+                }
             }
-            else { 
-              fd.setFill(Color.TRANSPARENT);
-              fd.gobbleok = false; 
         }
+
+        dotnum = 0;
+
+        for (FakeDot fd : fdotz) {
+            if (fd.imok) {
+
+                fd.setFill(Color.INDIANRED);
+                fd.gobbleok = true;
+            } else {
+                fd.setFill(Color.TRANSPARENT);
+                fd.gobbleok = false;
+            }
 //      for (int i = 0; i < 12; i++) {
 //            for (int j = 0; j < 6; j++) {
 //                if (powerpellets[i*50][j*50]){
@@ -372,7 +452,8 @@ int dotnum = 0;
 //                    
 //                }
 //            }
-    }
+        }
+
     }
 
     public void makeWalls() {
@@ -383,6 +464,7 @@ int dotnum = 0;
         Wall botSquare = new Wall(470, 345, 30, 175);
         Wall sqaureTop = new Wall(470, 225, 30, 75);
         Wall sqareTop = new Wall(595, 225, 30, 75);
+        naruto = new Wall(500, 300);
 
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
@@ -402,6 +484,13 @@ int dotnum = 0;
 //        root.getChildren().add()
         for (int i = 12; i < 12; i++) {
 //        wall = new Wall();
+        }
+    }
+
+    private void checkMiddleWall(Wall naruto) {
+        if (wallInCenter) {
+            wallz.remove(naruto);
+            wallInCenter = false;
         }
     }
 
@@ -426,6 +515,19 @@ int dotnum = 0;
             pacman.setFill(Color.ORANGE);
         }
     }
+
+//    public boolean checkWallGhost() {
+//        for (Ghost g : ghostz) {
+//            for (Wall w : wallz) {
+//
+//                if (g.getBoundsInParent().intersects(w.getBoundsInParent())) {
+//                    return true;
+//                }
+//            }
+//
+//        }
+//        return false;
+//    }
 
     public boolean checkWall() {
         for (Wall w : wallz) {
