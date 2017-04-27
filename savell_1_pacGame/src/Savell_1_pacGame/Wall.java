@@ -20,6 +20,7 @@ public class Wall extends Rectangle{
     int y;
     int w;
     int h;
+    
     public Wall(int x, int y, int w, int h){
         this.setX(x);
         this.setY(y);
@@ -37,6 +38,15 @@ public class Wall extends Rectangle{
         this.setHeight(40);
         this.setWidth(100);
         wallz.add(this);
+//        root.getChildren().add(this);
+    }
+    public Wall(int x, int y, int m){
+        this.setX(x);
+        this.setY(y);
+        this.setHeight(100);
+        this.setWidth(75);
+        wallz.add(this);
+//        root.getChildren().add(this);
     }
             
     

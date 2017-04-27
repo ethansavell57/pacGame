@@ -54,6 +54,7 @@ public class Savell_1_pacGame extends Application {
     static ArrayList<Ghost> ghostz = new ArrayList();
     public static Group root;
     static Rectangle rect;
+    static Wall mario;
     static Ghost ghost;
     static Mark mark;
     static boolean wallInCenter = true;
@@ -61,7 +62,7 @@ public class Savell_1_pacGame extends Application {
     static Wall wall;
     static Wall naruto;
     static Junction junct;
-    
+    static int junctCounter;
     static int mouthCounter;
     static boolean[][] powerpellets = new boolean[1100][600];
     static Random randy;
@@ -86,14 +87,16 @@ public class Savell_1_pacGame extends Application {
         ghost = new Ghost(1);
         ghost = new Ghost(3);
         ghost = new Ghost(4);
-
+        mario = new Wall(590, 275, 90);
         rect = new Rectangle(150, 50, 25, 25);
         rect.setFill(Color.BLUE);
         badblockz.add(rect);
         mark = new Mark(580, 156);
-        junct = new Junction(420,250);
-        junct = new Junction(600, 300);
-        junct = new Junction(600, 270);
+        junct = new Junction(420, 250, true);
+        junct = new Junction(250, 300, true);
+        
+//        junct = new Junction(600, 300);
+//        junct = new Junction(600, 270);
         makeWalls();
         makeDots();
 
@@ -116,7 +119,7 @@ public class Savell_1_pacGame extends Application {
                 String code = event.getCode().toString();
                 input.remove(code);
                 if (event.getCode() == KeyCode.W) {
-                    for(Ghost g: ghostz){
+                    for (Ghost g : ghostz) {
                         g.up = true;
                     }
                 }
@@ -201,7 +204,10 @@ public class Savell_1_pacGame extends Application {
             System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
             handlePacman();
             checkDots();
-            for (Ghost g: ghostz){
+            for (Junction j : junctionz){
+                j.handleJunctions();
+            }
+            for (Ghost g : ghostz) {
                 g.handleGhost();
             }
             if (wallInCenter) {
@@ -250,8 +256,8 @@ public class Savell_1_pacGame extends Application {
 //                }
 //            }
 //        }
-
-        private void handlePacman() {
+        public void handlePacman() {
+            checkMiddleWall(naruto);
             if (checkWall()) {
                 System.out.println("WALLS");
             }
@@ -471,7 +477,11 @@ public class Savell_1_pacGame extends Application {
         Wall sqaureTop = new Wall(470, 225, 30, 75);
         Wall sqareTop = new Wall(595, 225, 30, 75);
         naruto = new Wall(500, 300);
-
+        for (int i = 1;i<5; i++){
+         for(int j = 0;j < 2;j ++){
+             junct =new Junction(200+((i-1)*400), 60+(400*(1-j)), true);
+         }
+        }
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
             //    topwall.setFill(Color.AQUAMARINE); 
@@ -493,13 +503,12 @@ public class Savell_1_pacGame extends Application {
         }
     }
 
-    private void checkMiddleWall(Wall naruto) {
+    public void checkMiddleWall(Wall naruto) {
         if (wallInCenter) {
             wallz.remove(naruto);
             wallInCenter = false;
         }
     }
-
     private void checkBounds(pacMan pacman) {
         // checkBounds is called in two different locations --- it's really only necessary in the animation dohandle
         // experiment - check the differences
@@ -534,7 +543,6 @@ public class Savell_1_pacGame extends Application {
 //        }
 //        return false;
 //    }
-
     public boolean checkWall() {
         for (Wall w : wallz) {
             if (pacman.getBoundsInParent().intersects(w.getBoundsInParent())) {
@@ -544,5 +552,7 @@ public class Savell_1_pacGame extends Application {
         return false;
 
     }
+
+
 
 }
