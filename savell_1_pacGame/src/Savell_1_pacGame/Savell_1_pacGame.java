@@ -94,7 +94,7 @@ public class Savell_1_pacGame extends Application {
         mark = new Mark(580, 156);
         junct = new Junction(420, 250, true);
         junct = new Junction(250, 300, true);
-        
+
 //        junct = new Junction(600, 300);
 //        junct = new Junction(600, 270);
         makeWalls();
@@ -204,7 +204,7 @@ public class Savell_1_pacGame extends Application {
             System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
             handlePacman();
             checkDots();
-            for (Junction j : junctionz){
+            for (Junction j : junctionz) {
                 j.handleJunctions();
             }
             for (Ghost g : ghostz) {
@@ -257,6 +257,9 @@ public class Savell_1_pacGame extends Application {
 //            }
 //        }
         public void handlePacman() {
+            if(!pacman.isAlive){
+                
+            }
             checkMiddleWall(naruto);
             if (checkWall()) {
                 System.out.println("WALLS");
@@ -477,11 +480,17 @@ public class Savell_1_pacGame extends Application {
         Wall sqaureTop = new Wall(470, 225, 30, 75);
         Wall sqareTop = new Wall(595, 225, 30, 75);
         naruto = new Wall(500, 300);
-        for (int i = 1;i<5; i++){
-         for(int j = 0;j < 2;j ++){
-             junct =new Junction(200+((i-1)*400), 60+(400*(1-j)), true);
-         }
+        for (int i = 1; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                junct = new Junction(200 + ((i - 1) * 400), 60 + (400 * (1 - j)), true);
+            }
+
         }
+        junct = new Junction(58, 300, true);
+        junct = new Junction(700, 300, true);
+        junct = new Junction(975, 275, true);
+        junct = new Junction(100, 300, true);
+
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
             //    topwall.setFill(Color.AQUAMARINE); 
@@ -509,6 +518,7 @@ public class Savell_1_pacGame extends Application {
             wallInCenter = false;
         }
     }
+
     private void checkBounds(pacMan pacman) {
         // checkBounds is called in two different locations --- it's really only necessary in the animation dohandle
         // experiment - check the differences
@@ -516,12 +526,13 @@ public class Savell_1_pacGame extends Application {
         boolean collisionDetected = false;
 
         // notice the difference in how an ArrayList iterates through items 
-        for (Rectangle badblock : badblockz) {
-            if (pacman.getBoundsInParent().intersects(badblock.getBoundsInParent())) {
+        for (Ghost g : ghostz) {
+            if (pacman.getBoundsInParent().intersects(g.getBoundsInParent())) {
                 collisionDetected = true;
-                badblock.setFill(Color.RED);
+                pacman.setFill(Color.RED);
+                pacman.isAlive = true;
             } else {
-                badblock.setFill(Color.BLUE);
+                pacman.setFill(Color.PLUM);
             }
         }
         if (collisionDetected) {
@@ -552,7 +563,5 @@ public class Savell_1_pacGame extends Application {
         return false;
 
     }
-
-
 
 }

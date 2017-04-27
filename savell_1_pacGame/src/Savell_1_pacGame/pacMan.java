@@ -28,6 +28,7 @@ public class pacMan extends Arc {
     boolean down;
     boolean open = true;
     boolean closed;
+    boolean isAlive;
 
     public pacMan(int x, int y) {
         this.setFill(Color.PLUM);
