@@ -15,8 +15,14 @@
  */
 package Savell_1_pacGame;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -34,7 +40,13 @@ import javafx.scene.text.Text;
 import javafx.event.ActionEvent;
 import javafx.scene.shape.Shape;
 import javafx.event.Event;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 /**
  * For more information see:
@@ -47,6 +59,8 @@ public class Savell_1_pacGame extends Application {
 
     static ArrayList<Wall> wallz = new ArrayList();
     static ArrayList<Junction> junctionz = new ArrayList();
+    static ArrayList<gameUser> users = new ArrayList();
+
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
     static ArrayList<Dot> dotz = new ArrayList();
@@ -66,6 +80,18 @@ public class Savell_1_pacGame extends Application {
     static int mouthCounter;
     static boolean[][] powerpellets = new boolean[1100][600];
     static Random randy;
+    static int calcedScore;
+    static int finalScore;
+    static int numdot;
+    static int divisor;
+    static Button submit;
+    static TextField textField;
+    static boolean scoreNotSet;
+    static boolean youWon;
+    static boolean lbIsShowing;
+    static boolean leaderBoardShowing;
+    static boolean leaderBoardHasNotBeenMade;
+    static Text score;
 
     @Override
     public void start(Stage primaryStage) {
@@ -76,6 +102,15 @@ public class Savell_1_pacGame extends Application {
         primaryStage.setScene(scene);
 
         Canvas canvas = new Canvas(1100, 600);
+
+        Rectangle background = new Rectangle();
+        background.setX(0);
+        background.setY(0);
+        background.setHeight(600);
+        background.setWidth(1100);
+        background.setFill(Color.CORNFLOWERBLUE);
+        root.getChildren().add(background);
+
         randy = new Random();
 
         //Notice gc is not being used yet 
@@ -94,6 +129,9 @@ public class Savell_1_pacGame extends Application {
         mark = new Mark(580, 156);
         junct = new Junction(420, 250, true);
         junct = new Junction(250, 300, true);
+        score = new Text(50, 40, "SCORE-" + Integer.toString(calcedScore));
+        score.setFill(Color.WHITE);
+        score.setFont(new Font(50));
 
 //        junct = new Junction(600, 300);
 //        junct = new Junction(600, 270);
@@ -123,32 +161,48 @@ public class Savell_1_pacGame extends Application {
                         g.up = true;
                     }
                 }
+//                if (event.getCode() == KeyCode.E) {
+//                    youWon = true;
+//                    if (youWon) {
+//                        lbIsShowing = true;
+//                    }
+//                }
                 if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.UP || event.getCode() == KeyCode.DOWN) {
                     pacman.left = false;
                     pacman.right = false;
                     pacman.up = false;
                     pacman.down = false;
                 }
+                if (event.getCode() == KeyCode.L) {
+                    pacman.rawScore = 157;
+                }
+                if (youWon && event.getCode() == KeyCode.T) {
+                    root.getChildren().clear();
+                    Text finalScoreText = new Text();
+                    finalScoreText.setText("Final Score - " + Integer.toString(finalScore));
+                    finalScoreText.setFont(new Font(60));
+                    finalScoreText.setX(400);
+                    finalScoreText.setY(50);
+                    finalScoreText.setFill(Color.TOMATO);
+                    root.getChildren().add(finalScoreText);
+
+                }
                 if (event.getCode() == KeyCode.RIGHT) { // don't use toString here!!!
                     pacman.right = true;
                     pacman.setFill(Color.CADETBLUE);
                     checkBounds(pacman);
-                    System.out.println("right is true");
                 } else if (event.getCode() == KeyCode.LEFT) {
                     pacman.left = true;
                     pacman.setFill(Color.RED);
                     checkBounds(pacman);
-                    System.out.println("left is true");
                 } else if (event.getCode() == KeyCode.UP) {
                     pacman.up = true;
                     pacman.setFill(Color.GREEN);
                     checkBounds(pacman);
-                    System.out.println("up is true");
                 } else if (event.getCode() == KeyCode.DOWN) {
                     pacman.down = true;
                     pacman.setFill(Color.ORANGE);
                     checkBounds(pacman);
-                    System.out.println("down is true");
                 }
             }
         });
@@ -169,11 +223,12 @@ public class Savell_1_pacGame extends Application {
         //try disabling canvas --- notice the difference 
         root.getChildren().add(canvas);
         //notice we are manually adding the shape objects to the "root" window
-        root.getChildren().add(rect);
         root.getChildren().add(pacman);
+        root.getChildren().add(score);
 
         timer.start();
         primaryStage.show();
+
     }
 
     /**
@@ -197,13 +252,19 @@ public class Savell_1_pacGame extends Application {
         @Override
         public void handle(long now) {
             // You can look at the key presses here as well -- this is one of many. Try others
+            numdot = 0;
+            for (FakeDot fd : fdotz) {
+
+                numdot += 1;
+            }
+
             if (input.contains("LEFT")) {
                 pacman.setCenterX(pacman.getCenterX() - 5);
             }
-            System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
-            System.out.println(pacman.getCenterX() + "," + pacman.getCenterY());
             handlePacman();
             checkDots();
+            handleText();
+
             for (Junction j : junctionz) {
                 j.handleJunctions();
             }
@@ -212,6 +273,81 @@ public class Savell_1_pacGame extends Application {
             }
             if (wallInCenter) {
                 wallz.remove(naruto);
+            }
+
+            if (youWon) {
+
+                if (lbIsShowing) {
+                    System.out.println("leaderBoard is showing");
+                    if (leaderBoardHasNotBeenMade) {
+                        System.out.println("userI is true");
+                        Label userLabel = new Label("Your Name:");
+                        submit = new Button("Submit");
+                        textField = new TextField();
+                        HBox hb = new HBox();
+                        hb.setSpacing(10);
+                        hb.setAlignment(Pos.CENTER);
+                        submit.isDefaultButton();
+                        root.getChildren().add(hb);
+
+                        hb.getChildren().addAll(userLabel, textField, submit);
+                    }
+
+                    submit.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent e) {
+                            if (scoreNotSet) {
+                                String name = new String();
+                                name = (textField.getText());
+
+//                                      System.out.println(name);
+                                System.out.println("clicking");
+                                gameUser user = new gameUser(finalScore, name);
+                                user.setName(name);
+
+                                user.setScore(finalScore);
+                                users.add(user);
+                                String userLine = new String();
+                                userLine = (user.getScore() + " " + user.getName());
+                                System.out.println(userLine);
+                                String lbtxt = "leaderBoard.txt";
+                                writeFile data = new writeFile(lbtxt, true);
+                                try {
+                                    data.writeToFile(userLine);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(Savell_1_pacGame.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                users.clear();
+                                try {
+                                    Scanner myScanner = new Scanner(new File(lbtxt));
+                                    while (myScanner.hasNextLine()) {
+                                        int i = 0;
+                                        String line = myScanner.nextLine();
+                                        if (!line.isEmpty()) {
+                                            while (line.charAt(i) != ' ') {
+                                                i++;
+                                            }
+                                            int sc = Integer.parseInt(line.substring(0, i));
+                                            String nm = line.substring(i + 1, line.length());
+                                            gameUser player1 = new gameUser(sc, nm);
+                                            player1.setScore(sc);
+                                            player1.setName(nm);
+                                            users.add(player1);
+
+                                        }
+
+                                    }
+                                } catch (FileNotFoundException g) {
+                                }
+
+                                leaderBoardShowing = true;
+
+                            }
+                        }
+
+                    });
+                }
+
             }
 
 //            doHandle();
@@ -256,13 +392,31 @@ public class Savell_1_pacGame extends Application {
 //                }
 //            }
 //        }
+        public void handleText() {
+            score.setText("SCORE-" + Integer.toString(calcedScore));
+        }
+
+        public void makeBackground() {
+            Rectangle background = new Rectangle();
+            background.setX(0);
+            background.setY(0);
+            background.setHeight(600);
+            background.setWidth(1100);
+            background.setFill(Color.CORNFLOWERBLUE);
+            root.getChildren().add(background);
+        }
+
         public void handlePacman() {
-            if(!pacman.isAlive){
-                
+            if (pacman.getRawScore() == 157) {
+                youWon = true;
+                finalScore = calcedScore;
+                pacman.rawScore += 1;
+            }
+            if (!pacman.isAlive) {
+
             }
             checkMiddleWall(naruto);
             if (checkWall()) {
-                System.out.println("WALLS");
             }
             mouthCounter += 1;
             if (mouthCounter > 6) {
@@ -337,7 +491,6 @@ public class Savell_1_pacGame extends Application {
             }
 
             // stop();
-            // System.out.println("Animation stopped");
         }
 
         private void doHandle() {
@@ -356,8 +509,17 @@ public class Savell_1_pacGame extends Application {
             }
 
             // stop();
-            // System.out.println("Animation stopped");
         }
+    }
+
+    public void calcScore() {
+        if (junctCounter < 600) {
+            divisor = 1;
+        } else {
+            divisor = (int) Math.ceil(junctCounter / 70);
+
+        }
+        calcedScore = (int) Math.ceil(pacman.getRawScore() * junctCounter / divisor);
     }
 
     public void checkDots() {
@@ -365,45 +527,16 @@ public class Savell_1_pacGame extends Application {
             if (pacman.getBoundsInParent().intersects(fd.getBoundsInParent())) {
                 pacman.rawScore += 1;
                 root.getChildren().remove(fd);
+
                 fd.setCenterX(2000);
                 fd.setCenterY(2000);
+                calcScore();
 
-//                System.out.println("*********rawScore is " + pacman.rawScore + "*********");
             }
         }
     }
 
     public void makeDots() {
-//        for (int i = 1; i < 8; i++) {
-//            for (int j = 0; j < 2; j++) {
-//                Dot dot = new Dot(10 + (i * 47), 65 + (j * 490));
-//            }
-//        }
-//        for (int i = 8; i < 14; i++) {
-//            for (int j = 0; j < 2; j++) {
-//                Dot dot = new Dot(i * 53, 60 + (j * 490));
-//            }
-//        }
-//        for (int i = 15; i < 21; i++) {
-//            for (int j = 0; j < 2; j++) {
-//                Dot dot = new Dot(i * 52, 60 + (j * 490));
-//            }
-//        }
-//        for (int i = 0; i < 8; i++) {
-//            Dot dot = new Dot(60, 100 + (i * 60));
-//        }
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 3; j++) {
-//                Dot dot = new Dot(330 + (j * 360), 100 + (i * 60));
-//            }
-//        }
-//        for ( int i = 0; i < 4; i ++) {
-//            Dot dot = new Dot(145+(i*45), 180);
-//            
-//        }
-//        for (int i = 4; i < 19; i ++){
-//            Dot dot = new Dot(145+(44*i), 180);
-//        }
 
         for (int i = 0; i < 1100; i++) {
             for (int j = 0; j < 600; j++) {
@@ -424,13 +557,10 @@ public class Savell_1_pacGame extends Application {
                 for (FakeDot fd : fdotz) {
                     for (Wall w : wallz) {
                         if (fd.getBoundsInParent().intersects(w.getBoundsInParent())) {
-//                            System.out.printf("\n *********** \n Intersection at %d %d \n ***********\n", i * 50, j * 50);
                             powerpellets[i * 50][j * 50] = false;
 
                         } else {
                             dotnum++;
-//                            System.out.printf("You have %d dots ---- ", dotnum);
-//                            System.out.printf("dot at %d %d \n", i, j);
 
                         }
                     }
@@ -455,15 +585,16 @@ public class Savell_1_pacGame extends Application {
                 fd.setFill(Color.INDIANRED);
                 fd.gobbleok = true;
             } else {
-                fd.setFill(Color.TRANSPARENT);
+                fd.setFill(Color.BLACK);
                 fd.gobbleok = false;
+                fd.setCenterX(-1000);
+                fd.setCenterY(-1000);
             }
 //      for (int i = 0; i < 12; i++) {
 //            for (int j = 0; j < 6; j++) {
 //                if (powerpellets[i*50][j*50]){
 //                    Dot dot = new Dot(i*50, j*50); 
 //                    dotnum++; 
-//                       System.out.printf("\n You really have %d dots", dotnum);
 //                    
 //                }
 //            }
@@ -490,7 +621,9 @@ public class Savell_1_pacGame extends Application {
         junct = new Junction(700, 300, true);
         junct = new Junction(975, 275, true);
         junct = new Junction(100, 300, true);
+        junct = new Junction(350, 300, true);
 
+        junct = new Junction(900, 200, true);
         for (int i = 0; i < 3; i++) {
             Wall topwall = new Wall(360 + ((i - 1) * 360), 0, 150, 30);
             //    topwall.setFill(Color.AQUAMARINE); 

@@ -29,7 +29,7 @@ class Junction extends Rectangle {
         this.setHeight(40);
         this.setWidth(100);
         junctionz.add(this);
-        root.getChildren().add(this);
+//        root.getChildren().add(this);
     }
 
     public boolean isIsActive() {

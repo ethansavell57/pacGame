@@ -54,4 +54,13 @@ public class pacMan extends Arc {
 //            this.setRotate(0);
 //        }
     }
+
+    public int getRawScore() {
+        return rawScore;
+    }
+
+    public void setRawScore(int rawScore) {
+        this.rawScore = rawScore;
+    }
+    
 }
