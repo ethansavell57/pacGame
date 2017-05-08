@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -60,7 +61,7 @@ public class Savell_1_pacGame extends Application {
     static ArrayList<Wall> wallz = new ArrayList();
     static ArrayList<Junction> junctionz = new ArrayList();
     static ArrayList<gameUser> users = new ArrayList();
-
+    static boolean makeScoreBoardStuff;
     static ArrayList<Rectangle> badblockz = new ArrayList();
     static ArrayList<String> input = new ArrayList<String>();
     static ArrayList<Dot> dotz = new ArrayList();
@@ -86,7 +87,7 @@ public class Savell_1_pacGame extends Application {
     static int divisor;
     static Button submit;
     static TextField textField;
-    static boolean scoreNotSet;
+    static boolean scoreNotSet = true;
     static boolean youWon;
     static boolean lbIsShowing;
     static boolean leaderBoardShowing;
@@ -176,16 +177,9 @@ public class Savell_1_pacGame extends Application {
                 if (event.getCode() == KeyCode.L) {
                     pacman.rawScore = 157;
                 }
-                if (youWon && event.getCode() == KeyCode.T) {
-                    root.getChildren().clear();
-                    Text finalScoreText = new Text();
-                    finalScoreText.setText("Final Score - " + Integer.toString(finalScore));
-                    finalScoreText.setFont(new Font(60));
-                    finalScoreText.setX(400);
-                    finalScoreText.setY(50);
-                    finalScoreText.setFill(Color.TOMATO);
-                    root.getChildren().add(finalScoreText);
 
+                if (event.getCode() == KeyCode.T) {
+                    pacman.rawScore = 150;
                 }
                 if (event.getCode() == KeyCode.RIGHT) { // don't use toString here!!!
                     pacman.right = true;
@@ -225,7 +219,7 @@ public class Savell_1_pacGame extends Application {
         //notice we are manually adding the shape objects to the "root" window
         root.getChildren().add(pacman);
         root.getChildren().add(score);
-
+        
         timer.start();
         primaryStage.show();
 
@@ -277,79 +271,78 @@ public class Savell_1_pacGame extends Application {
 
             if (youWon) {
 
-                if (lbIsShowing) {
-                    System.out.println("leaderBoard is showing");
-                    if (leaderBoardHasNotBeenMade) {
-                        System.out.println("userI is true");
-                        Label userLabel = new Label("Your Name:");
-                        submit = new Button("Submit");
-                        textField = new TextField();
-                        HBox hb = new HBox();
-                        hb.setSpacing(10);
-                        hb.setAlignment(Pos.CENTER);
-                        submit.isDefaultButton();
-                        root.getChildren().add(hb);
-
-                        hb.getChildren().addAll(userLabel, textField, submit);
-                    }
-
-                    submit.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent e) {
-                            if (scoreNotSet) {
-                                String name = new String();
-                                name = (textField.getText());
-
-//                                      System.out.println(name);
-                                System.out.println("clicking");
-                                gameUser user = new gameUser(finalScore, name);
-                                user.setName(name);
-
-                                user.setScore(finalScore);
-                                users.add(user);
-                                String userLine = new String();
-                                userLine = (user.getScore() + " " + user.getName());
-                                System.out.println(userLine);
-                                String lbtxt = "leaderBoard.txt";
-                                writeFile data = new writeFile(lbtxt, true);
-                                try {
-                                    data.writeToFile(userLine);
-                                } catch (IOException ex) {
-                                    Logger.getLogger(Savell_1_pacGame.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                users.clear();
-                                try {
-                                    Scanner myScanner = new Scanner(new File(lbtxt));
-                                    while (myScanner.hasNextLine()) {
-                                        int i = 0;
-                                        String line = myScanner.nextLine();
-                                        if (!line.isEmpty()) {
-                                            while (line.charAt(i) != ' ') {
-                                                i++;
-                                            }
-                                            int sc = Integer.parseInt(line.substring(0, i));
-                                            String nm = line.substring(i + 1, line.length());
-                                            gameUser player1 = new gameUser(sc, nm);
-                                            player1.setScore(sc);
-                                            player1.setName(nm);
-                                            users.add(player1);
-
-                                        }
-
-                                    }
-                                } catch (FileNotFoundException g) {
-                                }
-
-                                leaderBoardShowing = true;
-
-                            }
-                        }
-
-                    });
-                }
-
             }
 
+//                if (lbIsShowing) {
+//                    System.out.println("leaderBoard is showing");
+//                    if (leaderBoardHasNotBeenMade) {
+//                        System.out.println("userI is true");
+//                        Label userLabel = new Label("Your Name:");
+//                        submit = new Button("Submit");
+//                        textField = new TextField();
+//                        HBox hb = new HBox();
+//                        hb.setSpacing(10);
+//                        hb.setAlignment(Pos.CENTER);
+//                        submit.isDefaultButton();
+//                        root.getChildren().add(hb);
+//
+//                        hb.getChildren().addAll(userLabel, textField, submit);
+//                    }
+//
+//                    submit.setOnAction(new EventHandler<ActionEvent>() {
+//                        @Override
+//                        public void handle(ActionEvent e) {
+//                            if (scoreNotSet) {
+//                                String name = new String();
+//                                name = (textField.getText());
+//
+////                                      System.out.println(name);
+//                                System.out.println("clicking");
+//                                gameUser user = new gameUser(finalScore, name);
+//                                user.setName(name);
+//
+//                                user.setScore(finalScore);
+//                                users.add(user);
+//                                String userLine = new String();
+//                                userLine = (user.getScore() + " " + user.getName());
+//                                System.out.println(userLine);
+//                                String lbtxt = "leaderBoard.txt";
+//                                writeFile data = new writeFile(lbtxt, true);
+//                                try {
+//                                    data.writeToFile(userLine);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(Savell_1_pacGame.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                                users.clear();
+//                                try {
+//                                    Scanner myScanner = new Scanner(new File(lbtxt));
+//                                    while (myScanner.hasNextLine()) {
+//                                        int i = 0;
+//                                        String line = myScanner.nextLine();
+//                                        if (!line.isEmpty()) {
+//                                            while (line.charAt(i) != ' ') {
+//                                                i++;
+//                                            }
+//                                            int sc = Integer.parseInt(line.substring(0, i));
+//                                            String nm = line.substring(i + 1, line.length());
+//                                            gameUser player1 = new gameUser(sc, nm);
+//                                            player1.setScore(sc);
+//                                            player1.setName(nm);
+//                                            users.add(player1);
+//
+//                                        }
+//
+//                                    }
+//                                } catch (FileNotFoundException g) {
+//                                }
+//
+//                                leaderBoardShowing = true;
+//
+//                            }
+//                        }
+//
+//                    });
+//                }
 //            doHandle();
             /// notice doHandle()  is what happens again and again it's defined below
         }
@@ -394,6 +387,7 @@ public class Savell_1_pacGame extends Application {
 //        }
         public void handleText() {
             score.setText("SCORE-" + Integer.toString(calcedScore));
+
         }
 
         public void makeBackground() {
@@ -407,11 +401,139 @@ public class Savell_1_pacGame extends Application {
         }
 
         public void handlePacman() {
+            
+            System.out.println(pacman.rawScore);
             if (pacman.getRawScore() == 157) {
                 youWon = true;
                 finalScore = calcedScore;
+                System.out.println("YOU WON");
+                System.out.println("the final score is" + finalScore);
+                root.getChildren().clear();
+                makeScoreBoardStuff = true;
                 pacman.rawScore += 1;
+                
             }
+            
+            
+            if (pacman.rawScore == 158) {
+                if (makeScoreBoardStuff){
+                    
+                
+                Text finalScoreText = new Text();
+                finalScoreText.setText("Final Score - " + Integer.toString(finalScore));
+                finalScoreText.setFont(new Font(60));
+                finalScoreText.setX(475);
+                finalScoreText.setY(100);
+                finalScoreText.setFill(Color.TOMATO);
+                root.getChildren().add(finalScoreText);
+                Text leaderBoard = new Text();
+                leaderBoard.setFont(new Font(60));
+                leaderBoard.setX(150);
+                leaderBoard.setY(250);
+                leaderBoard.setFill(Color.STEELBLUE);
+                root.getChildren().add(leaderBoard);
+                Label userLabel = new Label("Your Name:");
+                submit = new Button("Submit");
+                textField = new TextField();
+                HBox hb = new HBox();
+                hb.setSpacing(10);
+                hb.setAlignment(Pos.CENTER);
+                submit.isDefaultButton();
+                root.getChildren().add(hb);
+                hb.getChildren().addAll(userLabel, textField, submit);
+                makeScoreBoardStuff = false;
+                }
+                submit.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        System.out.println("clicking");
+                        if (scoreNotSet) {
+                            String name = new String();
+                            name = (textField.getText());
+                            System.out.println(name);
+
+//                                    System.out.println(name);
+                            gameUser user = new gameUser(finalScore, name);
+                            user.setName(name);
+                            user.setScore(finalScore);
+                            users.add(user);
+                            String userLine = new String();
+                            userLine = (user.getScore() + " " + user.getName());
+                            System.out.println(userLine);
+                            String lbtxt = "leaderBoard.txt";
+                            writeFile data = new writeFile(lbtxt, true);
+                            try {
+                                data.writeToFile(userLine);
+                                System.out.println("trying");
+                            } catch (IOException ex) {
+                                Logger.getLogger(Savell_1_pacGame.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            users.clear();
+                            try {
+                                Scanner myScanner = new Scanner(new File(lbtxt));
+                                while (myScanner.hasNextLine()) {
+                                    int i = 0;
+                                    String line = myScanner.nextLine();
+                                    if (!line.isEmpty()) {
+                                        while (line.charAt(i) != ' ') {
+                                            i++;
+                                        }
+                                        int sc = Integer.parseInt(line.substring(0, i));
+                                        String nm = line.substring(i + 1, line.length());
+//                                                System.out.println(sc);
+                                        gameUser player1 = new gameUser(sc, nm);
+                                        player1.setScore(sc);
+                                        player1.setName(nm);
+                                        users.add(player1);
+//                                                System.out.println("score-" + player1.score);
+//                                                System.out.println("name-" + player1.getName());
+
+                                    }
+
+                                }
+                            } catch (FileNotFoundException g) {
+                            }
+
+                            leaderBoardShowing = true;
+
+                        }
+                                if (leaderBoardShowing) {
+                scoreNotSet = false;
+
+                System.out.println("before sorting");
+                System.out.println(users);
+                Collections.sort(users);
+
+                System.out.println("after sorting");
+                System.out.println(users);
+                ArrayList<gameUser> topTen = new ArrayList();
+                Text rankText = new Text(160, 70, "RANK");
+                Text nameText = new Text(300, 70, "NAME");
+                Text scoreText = new Text(10, 70, "SCORE");
+                rankText.setFont(new Font(40));
+                rankText.setFill(Color.BLACK);
+                nameText.setFont(new Font(40));
+                nameText.setFill(Color.BLACK);
+                scoreText.setFont(new Font(40));
+                scoreText.setFill(Color.BLACK);
+                root.getChildren().addAll(rankText, nameText, scoreText);
+                for (int i = 1; i < 11; i++) {
+                    Text text = new Text();
+                    text.setText(Integer.toString(i) + "          " + users.get(i));
+                    text.setFont(new Font(40));
+                    text.setX(20);
+                    text.setY(100 + i * 40);
+                    text.setFill(Color.STEELBLUE);
+                    root.getChildren().add(text);
+
+                }
+            }
+                    }
+
+                });
+
+            }
+
             if (!pacman.isAlive) {
 
             }
